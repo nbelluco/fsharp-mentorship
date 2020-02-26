@@ -17,30 +17,34 @@ let matchOperation (input: string) =
     | "**" -> Operation.Power
     | _ -> Operation.NotCorrect
 
+let printResult (result: float) =
+    printfn "%g" result
+
 let executeOperation (firstNumber: float, secondNumber: float, operation: Operation) =
     match operation with
-    | Operation.Sum -> printfn ">> %g + %g = %g" firstNumber secondNumber (firstNumber + secondNumber)
-    | Operation.Subtraction -> printfn ">> %g - %g = %g" firstNumber secondNumber (firstNumber - secondNumber)
-    | Operation.Multiplication -> printfn ">> %g * %g = %g" firstNumber secondNumber (firstNumber * secondNumber)
-    | Operation.Division -> printfn ">> %g / %g = %g" firstNumber secondNumber (firstNumber / secondNumber)
-    | Operation.Power -> printfn ">> %g ** %g = %g" firstNumber secondNumber (pown firstNumber (int secondNumber))
+    | Operation.Sum -> printResult (firstNumber + secondNumber)
+    | Operation.Subtraction -> printResult (firstNumber - secondNumber)
+    | Operation.Multiplication -> printResult (firstNumber * secondNumber)
+    | Operation.Division -> printResult (firstNumber / secondNumber)
+    | Operation.Power -> printResult (pown firstNumber (int secondNumber))
     | Operation.NotCorrect -> printfn "Invalid operation."
                             
+
 [<EntryPoint>]
 let main argv =
 
     printfn "Welcome to the demo calculator written in F#"
-    printfn "--------------------------------------------\n"
-    printfn "Syntax: [number] [symbol] [number]"
+    printfn "--------------------------------------------"
+    printfn "Syntax: [number] [symbol] [number]\n"
 
     while true do
         printf ">> "
         let userInput = Console.ReadLine().Split ' '
         let chosenOperation = matchOperation userInput.[1]
         if userInput.[1] = "/" then
-            if int userInput.[2] = 0 then
+            if float userInput.[2] = 0.0 then
                 printfn "Attempt to divide by 0."
-        else
-            executeOperation ( float userInput.[0], float userInput.[2], chosenOperation)    
+            else
+                executeOperation ( float userInput.[0], float userInput.[2], chosenOperation)    
 
     0 // return an integer exit code
